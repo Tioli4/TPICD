@@ -101,87 +101,52 @@ autos2021<-rbind(autosenero2021,autosfebrero2021,autosmarzo2021,autosabril2021,a
                  autosjunio2021,autosjulio2021,autosagosto2021,autosseptiembre2021,
                  autosnoviembre2021,autosdiciembre2021)
 
-problems(autos)
+#problems(autos)
 
-autos$automotor_modelo_codigo[autos$automotor_modelo_codigo == ""] <- NA
-sum(is.na(autos$automotor_modelo_codigo)) 
+#autos$automotor_modelo_codigo[autos$automotor_modelo_codigo == ""] <- NA
+#sum(is.na(autos$automotor_modelo_codigo)) 
 
-autos[autos$automotor_tipo_descripcion == "SEDAN 3 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 3 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "SEDAN 3 PTAS.", "automotor_tipo_descripcion"] <- "SEDAN 3 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 3 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 3 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 3 PTAS.", "automotor_tipo_descripcion"] <- "SEDAN 3 PUERTAS"
 
-autos[autos$automotor_tipo_descripcion == "BERLINA 3 PTAS", "automotor_tipo_descripcion"] <- "BERLINA 3 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "BERLINA 3 PTAS.", "automotor_tipo_descripcion"] <- "BERLINA 3 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "BERLINA 3 PTAS", "automotor_tipo_descripcion"] <- "BERLINA 3 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "BERLINA 3 PTAS.", "automotor_tipo_descripcion"] <- "BERLINA 3 PUERTAS"
 
-autos[autos$automotor_tipo_descripcion == "SEDAN 4 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 4 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "SEDAN 4 PTAS.", "automotor_tipo_descripcion"] <- "SEDAN 4 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 4 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 4 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 4 PTAS.", "automotor_tipo_descripcion"] <- "SEDAN 4 PUERTAS"
 
-autos[autos$automotor_tipo_descripcion == "BERLINA 4 PTAS", "automotor_tipo_descripcion"] <- "BERLINA 4 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "BERLINA 4 PTAS.", "automotor_tipo_descripcion"] <- "BERLINA 4 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "BERLINA 4 PTAS", "automotor_tipo_descripcion"] <- "BERLINA 4 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "BERLINA 4 PTAS.", "automotor_tipo_descripcion"] <- "BERLINA 4 PUERTAS"
 
-autos[autos$automotor_tipo_descripcion == "SEDAN 2 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 2 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 2 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 2 PUERTAS"
 
-autos[autos$automotor_tipo_descripcion == "SEDAN 5 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 5 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "SEDAN 5  PUERTAS", "automotor_tipo_descripcion"] <- "SEDAN 5 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "SEDAN 5PUERTAS", "automotor_tipo_descripcion"] <- "SEDAN 5 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 5 PTAS", "automotor_tipo_descripcion"] <- "SEDAN 5 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 5  PUERTAS", "automotor_tipo_descripcion"] <- "SEDAN 5 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "SEDAN 5PUERTAS", "automotor_tipo_descripcion"] <- "SEDAN 5 PUERTAS"
 
-autos[autos$automotor_tipo_descripcion == "BERLINA 5 PTAS", "automotor_tipo_descripcion"] <- "BERLINA 5 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "BERLINA 5 PTAS.", "automotor_tipo_descripcion"] <- "BERLINA 5 PUERTAS"
-
-
-autos[autos$automotor_tipo_descripcion == "S. WAGON", "automotor_tipo_descripcion"] <- "S.WAGON"
-
-autos[autos$automotor_tipo_descripcion == "RURAL 4 PTAS", "automotor_tipo_descripcion"] <- "RURAL 4 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "RURAL 5 PTAS", "automotor_tipo_descripcion"] <- "RURAL 5 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "RURAL 4/5 PTAS", "automotor_tipo_descripcion"] <- "RURAL 4/5 PUERTAS"
-autos[autos$automotor_tipo_descripcion == "RURAL 2/3 PTAS", "automotor_tipo_descripcion"] <- "RURAL 2/3 PUERTAS"
-
-autos[autos$automotor_tipo_descripcion == "TRANSP. DE PASAJEROS", "automotor_tipo_descripcion"] <- "TRANS.DE PASAJEROS"
-
-autos[autos$automotor_tipo_descripcion == "PICK UP", "automotor_tipo_descripcion"] <- "PICK-UP"
-autos[autos$automotor_tipo_descripcion == "PICK UP MUDANCERO", "automotor_tipo_descripcion"] <- "PICK-UP MUDANCERO"
-autos[autos$automotor_tipo_descripcion == "PICK-UP CAB.DOBLE", "automotor_tipo_descripcion"] <- "PICK-UP CABINA DOBLE"
-
-autos[autos$automotor_tipo_descripcion == "MINIBUS (O MICROOMNIBUS)", "automotor_tipo_descripcion"] <- "MINIBUS"
-autos[autos$automotor_tipo_descripcion == "PICK UP", "automotor_tipo_descripcion"] <- "PICK-UP"
+#autos[autos$automotor_tipo_descripcion == "BERLINA 5 PTAS", "automotor_tipo_descripcion"] <- "BERLINA 5 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "BERLINA 5 PTAS.", "automotor_tipo_descripcion"] <- "BERLINA 5 PUERTAS"
 
 
-unique(autos$automotor_tipo_descripcion)
-view(unique(autos$automotor_tipo_descripcion))
+#autos[autos$automotor_tipo_descripcion == "S. WAGON", "automotor_tipo_descripcion"] <- "S.WAGON"
 
-#
-view(autos2020)
-autos2020 <- autos2020[,!names(autos2019sucio) %in% c("titular_domicilio_provincia_id", "titular_pais_nacimiento_id")]
-||
+#autos[autos$automotor_tipo_descripcion == "RURAL 4 PTAS", "automotor_tipo_descripcion"] <- "RURAL 4 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "RURAL 5 PTAS", "automotor_tipo_descripcion"] <- "RURAL 5 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "RURAL 4/5 PTAS", "automotor_tipo_descripcion"] <- "RURAL 4/5 PUERTAS"
+#autos[autos$automotor_tipo_descripcion == "RURAL 2/3 PTAS", "automotor_tipo_descripcion"] <- "RURAL 2/3 PUERTAS"
 
+#autos[autos$automotor_tipo_descripcion == "TRANSP. DE PASAJEROS", "automotor_tipo_descripcion"] <- "TRANS.DE PASAJEROS"
 
-autos_robos2020 <- autos2020 %>% group_by(registro_seccional_descripcion) %>%
-  filter(tramite_tipo == "DENUNCIA DE ROBO O HURTO / RETENCION INDEBIDA")
+#autos[autos$automotor_tipo_descripcion == "PICK UP", "automotor_tipo_descripcion"] <- "PICK-UP"
+#autos[autos$automotor_tipo_descripcion == "PICK UP MUDANCERO", "automotor_tipo_descripcion"] <- "PICK-UP MUDANCERO"
+#autos[autos$automotor_tipo_descripcion == "PICK-UP CAB.DOBLE", "automotor_tipo_descripcion"] <- "PICK-UP CABINA DOBLE"
 
-comisarias2020 <- autos_robos2020 %>% 
-  mutate(cantidad = n())
-
-unique(comisarias$registro_seccional_descripcion)
-
-comisarias2020 <- comisarias2020 %>% ungroup() %>% 
-  summarise(codigo_comisaria = comisarias2020$registro_seccional_codigo,
-            nombre_comisaria = comisarias2020$registro_seccional_descripcion,
-            cantidad_robos = cantidad) %>% 
-  mutate(porcentaje = cantidad_robos/3.198)
-
-comisarias2020<- unique(comisarias2020)
-glimpse(comisarias_c)
-view(comisarias2020)
+#autos[autos$automotor_tipo_descripcion == "MINIBUS (O MICROOMNIBUS)", "automotor_tipo_descripcion"] <- "MINIBUS"
+#autos[autos$automotor_tipo_descripcion == "PICK UP", "automotor_tipo_descripcion"] <- "PICK-UP"
 
 
-
-comisarias2020$nombre_comisaria = as.factor(comisarias2020$nombre_comisaria)
-
-comisarias_top <- comisarias2020 %>% filter(cantidad_robos >200)
-view(comisarias_top)
-ggplot(comisarias_top, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), fill = nombre_comisaria)) + 
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(y = "comisarias")
-  
+#unique(autos$automotor_tipo_descripcion)
+#view(unique(autos$automotor_tipo_descripcion))
 
 
 #2018
@@ -232,6 +197,38 @@ comisarias2019 <- comisarias2019 %>% ungroup() %>%
 comisarias2019 <- unique(comisarias2019)
 view(comisarias2019)
 
+#2020
+view(autos2020)
+
+autos_robos2020 <- autos2020 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "DENUNCIA DE ROBO O HURTO / RETENCION INDEBIDA")
+
+view(autos_robos2020)
+
+comisarias2020 <- autos_robos2020 %>% 
+  mutate(cantidad = n())
+
+unique(comisarias2020$registro_seccional_descripcion)
+
+comisarias2020 <- comisarias2020 %>% ungroup() %>% 
+  summarise(codigo_comisaria = comisarias2020$registro_seccional_codigo,
+            nombre_comisaria = comisarias2020$registro_seccional_descripcion,
+            cantidad_robos = cantidad) %>% 
+  mutate(porcentaje = cantidad_robos/21663)
+
+comisarias2020<- unique(comisarias2020)
+view(comisarias2020)
+
+
+
+comisarias2020$nombre_comisaria = as.factor(comisarias2020$nombre_comisaria)
+
+comisarias_top2020 <- comisarias2020 %>% filter(cantidad_robos >300)
+view(comisarias_top2020)
+ggplot(comisarias_top2020, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), fill = nombre_comisaria)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(y = "comisarias")
+
 #2021
 view(autos2021)
 
@@ -255,3 +252,29 @@ comisarias2021 <- comisarias2021 %>% ungroup() %>%
 
 comisarias2021 <- unique(comisarias2021)
 view(comisarias2021)
+
+#2022
+autos_robos2022<- autos2022 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "DENUNCIA DE ROBO O HURTO / RETENCION INDEBIDA")
+view(autos_robos2022)
+comisarias2022 <- autos_robos2022 %>% 
+  mutate(cantidad = n())
+view(comisarias2022)
+unique(comisarias2022$registro_seccional_descripcion)
+
+comisarias2022 <- comisarias2022 %>% ungroup() %>% 
+  summarise(codigo_comisaria = comisarias2022$registro_seccional_codigo,
+            nombre_comisaria = comisarias2022$registro_seccional_descripcion,
+            cantidad_robos = cantidad) %>% 
+  mutate(porcentaje = cantidad_robos/8548)
+
+comisarias2022<- unique(comisarias2022)
+view(comisarias2022)
+
+
+comisarias2022$nombre_comisaria = as.factor(comisarias2022$nombre_comisaria)
+
+comisarias_top2022 <- comisarias2022 %>% filter(cantidad_robos >100)
+ggplot(comisarias_top2022, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), fill = nombre_comisaria)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(y = "comisarias")
