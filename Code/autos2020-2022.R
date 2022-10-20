@@ -4,7 +4,7 @@ library(modelr)
 library(lubridate)
 
 
-setwd("/home/datascience/Escritorio/TPFINALICD/Datasets")
+setwd("/Users/matia/ICD/Datasets")
 autosenero2018 <- read.csv("dnrpa-robos-recuperos-autos-201801.csv")
 autosfebrero2018  <- read.csv("dnrpa-robos-recuperos-autos-201802.csv")
 autosmarzo2018 <- read.csv("dnrpa-robos-recuperos-autos-201803.csv")
@@ -74,6 +74,19 @@ autosseptiembre2020<- read.csv("dnrpa-robos-recuperos-autos-202009.csv")
 autosoctubre2020<- read.csv("dnrpa-robos-recuperos-autos-202010.csv")
 autosnoviembre2020<- read.csv("dnrpa-robos-recuperos-autos-202011.csv")
 autosdiciembre2020<- read.csv("dnrpa-robos-recuperos-autos-202012.csv")
+#Importo datasets del 2021
+autosenero2021<-read.csv("dnrpa-robos-recuperos-autos-202101.csv")
+autosfebrero2021<-read.csv("dnrpa-robos-recuperos-autos-202102.csv")
+autosmarzo2021<-read.csv("dnrpa-robos-recuperos-autos-202103.csv")
+autosabril2021<-read.csv("dnrpa-robos-recuperos-autos-202104.csv")
+autosmayo2021<-read.csv("dnrpa-robos-recuperos-autos-202105.csv")
+autosjunio2021<-read.csv("dnrpa-robos-recuperos-autos-202106.csv")
+autosjulio2021<-read.csv("dnrpa-robos-recuperos-autos-202107.csv")
+autosagosto2021<- read.csv("dnrpa-robos-recuperos-autos-202108.csv")
+autosseptiembre2021<- read.csv("dnrpa-robos-recuperos-autos-202109.csv")
+autosoctubre2021<- read.csv("dnrpa-robos-recuperos-autos-202110.csv")
+autosnoviembre2021<- read.csv("dnrpa-robos-recuperos-autos-202111.csv")
+autosdiciembre2021<- read.csv("dnrpa-robos-recuperos-autos-202112.csv")
 
 
 autos2022<-rbind(autosenero2022, autosfebrero2022)
@@ -83,6 +96,10 @@ autos2022<-rbind(autos2022,autosagosto2022)
 autos2020<-rbind(autosenero2020,autosfebrero2020,autosmarzo2020,autosabril2020,autosmayo2020,
   autosjunio2020,autosjulio2020,autosagosto2020,autosseptiembre2020,autosnoviembre2020,autosdiciembre2020)
 view(autos2020)
+
+autos2021<-rbind(autosenero2021,autosfebrero2021,autosmarzo2021,autosabril2021,autosmayo2021,
+                 autosjunio2021,autosjulio2021,autosagosto2021,autosseptiembre2021,
+                 autosnoviembre2021,autosdiciembre2021)
 
 problems(autos)
 
@@ -134,7 +151,7 @@ view(unique(autos$automotor_tipo_descripcion))
 #
 view(autos2020)
 autos2020 <- autos2020[,!names(autos2019sucio) %in% c("titular_domicilio_provincia_id", "titular_pais_nacimiento_id")]
-
+||
 
 
 autos_robos2020 <- autos2020 %>% group_by(registro_seccional_descripcion) %>%
@@ -167,6 +184,74 @@ ggplot(comisarias_top, aes(x = cantidad_robos, y = reorder(nombre_comisaria, can
   
 
 
+#2018
+view(autos2018)
 
+autos_robos2018 <- autos2018 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "DENUNCIA DE ROBO O HURTO")
 
+view(autos_robos2018)
 
+comisarias2018 <- autos_robos2018 %>% 
+  mutate(cantidad = n())
+
+unique(comisarias2018$registro_seccional_descripcion)
+
+view(comisarias2018)
+
+comisarias2018 <- comisarias2018 %>% ungroup() %>% 
+  summarise(codigo_comisaria = comisarias2018$registro_seccional_codigo,
+            nombre_comisaria = comisarias2018$registro_seccional_descripcion,
+            cantidad_robos = cantidad) %>% 
+  mutate(porcentaje = cantidad_robos/33.787) #33,787 numero de autos robados en el año
+
+comisarias2018 <- unique(comisarias2018)
+view(comisarias2018)
+
+#2019
+view(autos2019)
+
+autos_robos2019 <- autos2019 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "DENUNCIA DE ROBO O HURTO")
+
+view(autos_robos2019)
+
+comisarias2019 <- autos_robos2019 %>% 
+  mutate(cantidad = n())
+
+unique(comisarias2019$registro_seccional_descripcion)
+
+view(comisarias2019)
+
+comisarias2019 <- comisarias2019 %>% ungroup() %>% 
+  summarise(codigo_comisaria = comisarias2019$registro_seccional_codigo,
+            nombre_comisaria = comisarias2019$registro_seccional_descripcion,
+            cantidad_robos = cantidad) %>% 
+  mutate(porcentaje = cantidad_robos/33.683) #33,787 numero de autos robados en el año
+
+comisarias2019 <- unique(comisarias2019)
+view(comisarias2019)
+
+#2021
+view(autos2021)
+
+autos_robos2021 <- autos2021 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "DENUNCIA DE ROBO O HURTO / RETENCION INDEBIDA")
+
+view(autos_robos2021)
+
+comisarias2021 <- autos_robos2021 %>% 
+  mutate(cantidad = n())
+
+unique(comisarias2021$registro_seccional_descripcion)
+
+view(comisarias2021)
+
+comisarias2021 <- comisarias2021 %>% ungroup() %>% 
+  summarise(codigo_comisaria = comisarias2021$registro_seccional_codigo,
+            nombre_comisaria = comisarias2021$registro_seccional_descripcion,
+            cantidad_robos = cantidad) %>% 
+  mutate(porcentaje = cantidad_robos/30.074) #33,787 numero de autos robados en el año
+
+comisarias2021 <- unique(comisarias2021)
+view(comisarias2021)
