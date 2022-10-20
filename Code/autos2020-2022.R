@@ -168,7 +168,7 @@ comisarias2018 <- comisarias2018 %>% ungroup() %>%
   summarise(codigo_comisaria = comisarias2018$registro_seccional_codigo,
             nombre_comisaria = comisarias2018$registro_seccional_descripcion,
             cantidad_robos = cantidad) %>% 
-  mutate(porcentaje = cantidad_robos/33.787) #33,787 numero de autos robados en el año
+  mutate(porcentaje = cantidad_robos/33787) #33787 numero de autos robados en el año
 
 comisarias2018 <- unique(comisarias2018)
 view(comisarias2018)
@@ -192,7 +192,7 @@ comisarias2019 <- comisarias2019 %>% ungroup() %>%
   summarise(codigo_comisaria = comisarias2019$registro_seccional_codigo,
             nombre_comisaria = comisarias2019$registro_seccional_descripcion,
             cantidad_robos = cantidad) %>% 
-  mutate(porcentaje = cantidad_robos/33.683) #33,787 numero de autos robados en el año
+  mutate(porcentaje = cantidad_robos/33683) # numero de autos robados en el año
 
 comisarias2019 <- unique(comisarias2019)
 view(comisarias2019)
@@ -223,7 +223,7 @@ view(comisarias2020)
 
 comisarias2020$nombre_comisaria = as.factor(comisarias2020$nombre_comisaria)
 
-comisarias_top2020 <- comisarias2020 %>% filter(cantidad_robos >300)
+comisarias_top2020 <- comisarias2020 %>% filter(cantidad_robos >200)
 view(comisarias_top2020)
 ggplot(comisarias_top2020, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), fill = nombre_comisaria)) + 
   geom_bar(stat = "identity", position = "dodge") +
@@ -278,3 +278,85 @@ comisarias_top2022 <- comisarias2022 %>% filter(cantidad_robos >100)
 ggplot(comisarias_top2022, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), fill = nombre_comisaria)) + 
   geom_bar(stat = "identity", position = "dodge") +
   labs(y = "comisarias")
+
+#Combinando df de comisarias
+comisarias_top2022 <- comisarias2022 %>% filter(cantidad_robos >100)
+comisarias_top2021 <- comisarias2021 %>% filter(cantidad_robos >200)
+comisarias_top2020 <- comisarias2020 %>% filter(cantidad_robos >200)
+comisarias_top2019 <- comisarias2019 %>% filter(cantidad_robos >200)
+comisarias_top2018 <- comisarias2018 %>% filter(cantidad_robos >200)
+
+view(comisarias_top2022)
+view(comisarias_top2021)
+view(comisarias_top2020)
+view(comisarias_top2019)
+view(comisarias_top2018)
+
+comisarias_top <- rbind(comisarias_top2018, comisarias_top2019, comisarias_top2020, comisarias_top2021,
+                        comisarias_top2022) %>% 
+  group_by(nombre_comisaria) %>% 
+  summarise(cantidad_robos_totales = sum(cantidad_robos)) %>% 
+  filter(cantidad_robos_totales >600)
+
+view(comisarias_top)
+nombrestop <- unique(comisarias_top$nombre_comisaria)
+view(nombrestop)
+
+#filtrando por la matanza n10 en c/año y viendo cantidad
+
+comisarias2018_LM10 <- comisarias2018 %>% 
+  filter(nombre_comisaria == "LA MATANZA Nº 10" ) %>% 
+  mutate(año = 2018)
+
+comisarias2019_LM10 <- comisarias2019 %>% 
+  filter(nombre_comisaria == "LA MATANZA Nº 10" ) %>% 
+  mutate(año = 2019)
+
+comisarias2020_LM10 <- comisarias2020 %>% 
+  filter(nombre_comisaria == "LA MATANZA Nº 10" ) %>% 
+  mutate(año = 2020)
+
+comisarias2021_LM10 <- comisarias2021 %>% 
+  filter(nombre_comisaria == "LA MATANZA Nº 10" ) %>% 
+  mutate(año = 2021)
+
+comisarias2022_LM10 <- comisarias2022 %>% 
+  filter(nombre_comisaria == "LA MATANZA Nº 10" ) %>% 
+  mutate(año = 2022) 
+
+
+la_matanza_10 <- rbind(comisarias2018_LM10,comisarias2019_LM10,comisarias2020_LM10,comisarias2021_LM10,
+                       comisarias2022_LM10) 
+ # mutate(cantidad_robos2019 = comisarias2019_LM10$cantidad_robos,
+ #        cantidad_robos2020 = comisarias2020_LM10$cantidad_robos,
+  #       cantidad_robos2021 = comisarias2021_LM10$cantidad_robos,
+  #       cantidad_robos2022 = comisarias2022_LM10$cantidad_robos)
+
+view(la_matanza_10)
+
+ggplot(la_matanza_10, aes(x = año, y = cantidad_robos, fill = cantidad_robos)) +
+  geom_bar(position = "dodge",  stat = "identity") + 
+  labs(title = "Cantidad de robos de autos en la comisaria La matanza N°10",
+       subtitle = "Por año, desde 2018 hasta actualidad", x = "Año", y = "Cantidad de robos de autos",
+       fill = "Cantidad")
+
+#
+
+
+matanza09<-autos_robos2020%>%
+  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+
+matanza2022<-autos_robos2022%>%
+  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+
+matanza9 <- rbind(matanza09,matanza2022)
+
+view(matanza9)
+    
+
+
+
+#comisarias_top <- comisarias_top %>% 
+#  mutate(cantidad_robos2018 = comisarias2018$cantidad_robos)
+
+
