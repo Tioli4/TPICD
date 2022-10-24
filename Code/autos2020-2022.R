@@ -4,7 +4,7 @@ library(modelr)
 library(lubridate)
 
 
-setwd("/Users/matia/ICD/Datasets")
+setwd("/home/datascience/Escritorio/robosautos/tpfinalicd-main/Datasets")
 autosenero2018 <- read.csv("dnrpa-robos-recuperos-autos-201801.csv")
 autosfebrero2018  <- read.csv("dnrpa-robos-recuperos-autos-201802.csv")
 autosmarzo2018 <- read.csv("dnrpa-robos-recuperos-autos-201803.csv")
@@ -358,5 +358,173 @@ view(matanza9)
 
 #comisarias_top <- comisarias_top %>% 
 #  mutate(cantidad_robos2018 = comisarias2018$cantidad_robos)
+ggplot(comisarias_top, aes(x = cantidad_robos_totales, y = reorder(nombre_comisaria, cantidad_robos_totales) , fill = (cantidad_robos_totales))) + 
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(x = "Robos de autos", y = "Comisaria", 
+       title = "Cantidad de robos de autos por comisarias", subtitle = "Desde el 2018 hasta la actualidad")
 
 
+
+#Autos recuperados 2018
+autos_rec2018 <- autos2018 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "COMUNICACIÓN DE RECUPERO")
+
+
+autos_rec2018 <- autos_rec2018 %>% 
+  mutate(cantidad_recuperos = n())
+
+comisarias_rec2018 <- autos_rec2018 %>% ungroup() %>% 
+  summarise(codigo_comisaria = autos_rec2018$registro_seccional_codigo,
+            nombre_comisaria = autos_rec2018$registro_seccional_descripcion,
+            cantidad_recuperos = cantidad_recuperos)
+
+comisarias_rec2018 <- unique(comisarias_rec2018)
+
+#Autos recuperados 2019
+autos_rec2019 <- autos2019 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "COMUNICACIÓN DE RECUPERO")
+
+
+autos_rec2019 <- autos_rec2019 %>% 
+  mutate(cantidad_recuperos = n())
+
+comisarias_rec2019<- autos_rec2019 %>% ungroup() %>% 
+  summarise(codigo_comisaria = autos_rec2019$registro_seccional_codigo,
+            nombre_comisaria = autos_rec2019$registro_seccional_descripcion,
+            cantidad_recuperos = cantidad_recuperos)
+
+comisarias_rec2019 <- unique(comisarias_rec2019)
+view(comisarias_rec2019)
+
+
+#Autos recuperados 2020
+autos_rec2020 <- autos2020 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "COMUNICACIÓN DE RECUPERO")
+
+
+autos_rec2020 <- autos_rec2020 %>% 
+  mutate(cantidad_recuperos = n())
+
+comisarias_rec2020<- autos_rec2020 %>% ungroup() %>% 
+  summarise(codigo_comisaria = autos_rec2020$registro_seccional_codigo,
+            nombre_comisaria = autos_rec2020$registro_seccional_descripcion,
+            cantidad_recuperos = cantidad_recuperos)
+
+comisarias_rec2020 <- unique(comisarias_rec2020)
+view(comisarias_rec2020)
+
+#Autos recuperados 2021
+autos_rec2021 <- autos2021 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "COMUNICACIÓN DE RECUPERO")
+
+
+autos_rec2021 <- autos_rec2021 %>% 
+  mutate(cantidad_recuperos = n())
+
+comisarias_rec2021<- autos_rec2021 %>% ungroup() %>% 
+  summarise(codigo_comisaria = autos_rec2021$registro_seccional_codigo,
+            nombre_comisaria = autos_rec2021$registro_seccional_descripcion,
+            cantidad_recuperos = cantidad_recuperos)
+
+comisarias_rec2021 <- unique(comisarias_rec2021)
+view(comisarias_rec2021)
+
+#Autos recuperados 2022
+autos_rec2022 <- autos2022 %>% group_by(registro_seccional_descripcion) %>%
+  filter(tramite_tipo == "COMUNICACIÓN DE RECUPERO")
+
+
+autos_rec2022 <- autos_rec2022 %>% 
+  mutate(cantidad_recuperos = n())
+
+comisarias_rec2022<- autos_rec2022 %>% ungroup() %>% 
+  summarise(codigo_comisaria = autos_rec2022$registro_seccional_codigo,
+            nombre_comisaria = autos_rec2022$registro_seccional_descripcion,
+            cantidad_recuperos = cantidad_recuperos)
+
+comisarias_rec2022 <- unique(comisarias_rec2022)
+view(comisarias_rec2022)
+
+
+#Combinamos datasets de comisarias con robos y de recuperaciones
+
+comisarias_top_rec <- rbind(comisarias_rec2018, comisarias_rec2019, comisarias_rec2020, comisarias_rec2021,
+                        comisarias_rec2022) %>% 
+  group_by(nombre_comisaria) %>% 
+  summarise(cantidad_recuperos_totales = sum(cantidad_recuperos))
+
+#view(comisarias_top_rec)
+
+#Combinamos dataset de comisaria top rec y robos, por top robados
+
+comisarias_top_robo_rec <- merge(comisarias_top, comisarias_top_rec, by = "nombre_comisaria")
+
+view(comisarias_top_robo_rec)
+
+ggplot(comisarias_top_robo_rec, aes(x = cantidad_robos_totales, y = reorder(nombre_comisaria, cantidad_robos_totales) ,
+                           fill = desc(cantidad_recuperos_totales))) + 
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(x = "Robos de autos", y = "Comisaria", 
+       title = "Cantidad de robos de autos por comisarias", subtitle = "Desde el 2018 hasta la actualidad",
+       fill = "Cantidad de recuperos")
+
+#Combinamos dataset de comisaria top rec y robos, por top recuperados
+comisarias_10_rec <- rbind(comisarias_rec2018, comisarias_rec2019, comisarias_rec2020, comisarias_rec2021,
+                            comisarias_rec2022) %>% 
+  group_by(nombre_comisaria) %>% 
+  summarise(cantidad_recuperos_totales = sum(cantidad_recuperos))%>% 
+  filter(cantidad_recuperos_totales>67)
+view(comisarias_10_rec)
+comisariass<- rbind(comisarias2018, comisarias2019, comisarias2020, comisarias2021,
+                        comisarias2022) %>% 
+  group_by(nombre_comisaria) %>% 
+  summarise(cantidad_robos_totales = sum(cantidad_robos)) 
+
+
+comisarias_top_rec <- merge(comisarias_10_rec , comisariass, by = "nombre_comisaria")
+
+view(comisarias_top_rec)
+
+ggplot(comisarias_top_rec, aes(x = cantidad_recuperos_totales, y = reorder(nombre_comisaria, cantidad_recuperos_totales) ,
+                                    fill = desc(cantidad_robos_totales))) + 
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(x = "Recuperos de autos", y = "Comisaria", 
+       title = "Cantidad de recuperos de autos por comisarias", subtitle = "Desde el 2018 hasta la actualidad",
+       fill = "Cantidad de robos")
+view(autos2019)
+# IDEA : Density ridges por fechas
+autos2019<-autos2019%>%
+  group_by(tramite_fecha)%>%
+  mutate(mes=month(tramite_fecha))%>%
+           mutate(anio=year(tramite_fecha))
+autos2020<-autos2020%>%
+  group_by(tramite_fecha)%>%
+  mutate(mes=month(tramite_fecha))%>%
+  mutate(anio=year(tramite_fecha))
+autos2021<-autos2021%>%
+  group_by(tramite_fecha)%>%
+  mutate(mes=month(tramite_fecha))%>%
+  mutate(anio=year(tramite_fecha))
+autos2022<-autos2022%>%
+  group_by(tramite_fecha)%>%
+  mutate(mes=month(tramite_fecha))%>%
+  mutate(anio=year(tramite_fecha))
+autos2018<-autos2018%>%
+  group_by(tramite_fecha)%>%
+  mutate(mes=month(tramite_fecha))%>%
+  mutate(anio=year(tramite_fecha))
+glimpse(autos2020)
+
+
+autos2018 <-  autos2018[,!names(autos2018) %in% c("automotor_tipo_codigo")]
+autos2019 <-  autos2019[,!names(autos2019) %in% c("automotor_tipo_codigo")]
+autos2020 <- autos2020[,!names(autos2020) %in% c("automotor_tipo_codigo")]
+autos2021 <- autos2021[,!names(autos2021) %in% c("automotor_tipo_codigo")]
+autos2022 <- autos2022[,!names(autos2022) %in% c("automotor_tipo_codigo")]
+
+autos<-rbind(autos2018,autos2019,autos2020,autos2021,autos2022)
+view(autos)
+
+autos[autos$tramite_tipo == "DENUNCIA DE ROBO O HURTO / RETENCION INDEBIDA", "tramite_tipo"] <- "DENUNCIA DE ROBO O HURTO"
+
+view(autos)
