@@ -2,9 +2,10 @@ library(ggplot2)
 library(tidyverse)
 library(modelr)
 library(lubridate)
+library(ggridges)
 
 
-setwd("/home/datascience/Escritorio/robosautos/tpfinalicd-main/Datasets")
+setwd("/home/datascience/Escritorio/tpfinalicd/Datasets")
 autosenero2018 <- read.csv("dnrpa-robos-recuperos-autos-201801.csv")
 autosfebrero2018  <- read.csv("dnrpa-robos-recuperos-autos-201802.csv")
 autosmarzo2018 <- read.csv("dnrpa-robos-recuperos-autos-201803.csv")
@@ -341,19 +342,43 @@ ggplot(la_matanza_10, aes(x = año, y = cantidad_robos, fill = cantidad_robos)) 
        fill = "Cantidad")
 
 #
-
-
-matanza09<-autos_robos2020%>%
+matanza0918<-autos_robos2018%>%
+  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+matanza0919<-autos_robos2019%>%
+  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+matanza0920<-autos_robos2020%>%
+  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+matanza0921<-autos_robos2021%>%
+  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+matanza0922<-autos_robos2022%>%
   filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
 
-matanza2022<-autos_robos2022%>%
-  filter(registro_seccional_descripcion=='LA MATANZA Nº 09')
+matanza0920 <-  matanza0920[,!names(matanza0920) %in% c("automotor_tipo_codigo")]
+matanza0919 <-  matanza0919[,!names(matanza0919) %in% c("automotor_tipo_codigo")]
+matanza0918 <-  matanza0918[,!names(matanza0918) %in% c("automotor_tipo_codigo")]
+matanza0921 <-  matanza0921[,!names(matanza0921) %in% c("automotor_tipo_codigo")]
+matanza0922 <-  matanza0922[,!names(matanza0922) %in% c("automotor_tipo_codigo")]
 
-matanza9 <- rbind(matanza09,matanza2022)
+matanza9 <- rbind(matanza0920,matanza0921,matanza0919,matanza0918,matanza0922)
+matanza9<-matanza9%>%
+  group_by(tramite_fecha)%>%
+  mutate(mes=month(tramite_fecha))%>%
+  mutate(anio=year(tramite_fecha)) %>% 
+  ungroup() %>% 
+  group_by(anio) %>% 
+  mutate(cantidad = n())
 
-#view(matanza9)
-    
+view(matanza9)
 
+matanza9$anio = as.factor(matanza9$anio)
+
+matanza9u <-matanza9%>%summarise(anio = unique(anio),
+                                 cantidad = cantidad)
+m9u <- unique(matanza9u)
+
+m9u %>% ggplot() + geom_point(aes(x = anio, y = cantidad)) +
+  labs(x = "Año", y = "Cantidad de robos", title = "Distribucion de robos de autos por año", 
+       subtitle = "En la comisaria La matanza N° 09")
 
 
 #comisarias_top <- comisarias_top %>% 
@@ -533,15 +558,15 @@ view(autos)
 
 library(sf)
 
-barrios <- st_read('https://raw.githubusercontent.com/esalvatierra/DGBCABA20/master/CABA_barrios.geojson')
-view(barrios)
+#barrios <- st_read('https://raw.githubusercontent.com/esalvatierra/DGBCABA20/master/CABA_barrios.geojson')
+#view(barrios)
+#
+#barrios %>%
+ # ggplot() +
+  #geom_sf() +
+  #theme_bw()
 
-barrios %>%
-  ggplot() +
-  geom_sf() +
-  theme_bw()
-
-municipios <- st_read('C:/Users/matia/Downloads/circuitos-electorales.geojson')
+municipios <- st_read('/home/datascience/Escritorio/tpfinalicd/Datasets/circuitos-electorales.geojson')
 
 municipios %>% filter(municipio_nombre == "La Matanza" )
 
@@ -557,26 +582,27 @@ municipios %>%
 view(autos_robos2018)
 
 library("rjson")
-result <- fromJSON(file = "input.json")
+
 
 
 
 #Robos de capital
-comisarias_juntas<-rbind(comisarias2018,comisarias2019,comisarias2020,comisarias2021,comisarias2022)
-robos_totales<-rbind(autos_robos2018,autos_robos2019,autos_robos2020,autos_robos2021,autos_robos2022)
-view(robos_totales)
-robos_capital<-robos_totales%>%
-  filter(registro_seccional_provincia=='Ciudad Autónoma de Bs.As.')%>%
-  group_by(registro_seccional_descripcion)
-robos_capital <- robos_capital %>% 
-  mutate(cantidad = n())
-view(robos_capital)
-robos_capital <- robos_capital %>% ungroup() %>% 
-  summarise(codigo_comisaria = robos_capital$registro_seccional_codigo,
-            nombre_comisaria = robos_capital$registro_seccional_descripcion,
-            cantidad_robos = cantidad)
+#comisarias_juntas<-rbind(comisarias2018,comisarias2019,comisarias2020,comisarias2021,comisarias2022)
+#robos_totales<-rbind(autos_robos2018,autos_robos2019,autos_robos2020,autos_robos2021,autos_robos2022)
 
-robos_capital <- unique(robos_capital)
+#view(robos_totales)
+#robos_capital<-robos_totales%>%
+ # filter(registro_seccional_provincia=='Ciudad Autónoma de Bs.As.')%>%
+  #group_by(registro_seccional_descripcion)
+#robos_capital <- robos_capital %>% 
+ # mutate(cantidad = n())
+#view(robos_capital)
+#robos_capital <- robos_capital %>% ungroup() %>% 
+ # summarise(codigo_comisaria = robos_capital$registro_seccional_codigo,
+  #          nombre_comisaria = robos_capital$registro_seccional_descripcion,
+   #         cantidad_robos = cantidad)
+
+#robos_capital <- unique(robos_capital)
 
 #Creo nuevo data para cambiar nombres de comisarias al nombre de su municipio y mergear con el mapa
 
@@ -619,7 +645,7 @@ comisariasMuni[comisariasMuni$nombre_comisaria == "MALVINAS ARGENTINAS Nº 2 (EX
 comisariasMuni[comisariasMuni$nombre_comisaria == "MALVINAS ARGENTINAS Nº 1 (EX. SAN MIGUEL NRO. 4)", "nombre_comisaria"] <- "Malvinas Argentinas"
 
 #SAN VICENTE
-comisariasMuni[comisariasMuni$nombre_comisaria == "SAN VICENTE", "nombre_comisaria"] <- "San Vicente"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "SAN VICENTE", "nombre_comisaria"] <- "San Vicente"
 
 #MERLO
 comisariasMuni[comisariasMuni$nombre_comisaria == "MERLO Nº 1", "nombre_comisaria"] <- "Merlo"
@@ -629,10 +655,10 @@ comisariasMuni[comisariasMuni$nombre_comisaria == "MERLO Nº 4", "nombre_comisar
 comisariasMuni[comisariasMuni$nombre_comisaria == "MERLO Nº 5", "nombre_comisaria"] <- "Merlo"
 
 #ESTEBAN ECHEVERRIA
-comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 1", "nombre_comisaria"] <- "Esteban Echeverria"
-comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 2", "nombre_comisaria"] <- "Esteban Echeverria"
-comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 3", "nombre_comisaria"] <- "Esteban Echeverria"
-comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 4", "nombre_comisaria"] <- "Esteban Echeverria"
+comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 1", "nombre_comisaria"] <- "Esteban Echeverría"
+comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 2", "nombre_comisaria"] <- "Esteban Echeverría"
+comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 3", "nombre_comisaria"] <- "Esteban Echeverría"
+comisariasMuni[comisariasMuni$nombre_comisaria == "ESTEBAN ECHEVERRIA Nº 4", "nombre_comisaria"] <- "Esteban Echeverría"
 
 #ADROGUE a ALMIRANTE BROWN
 comisariasMuni[comisariasMuni$nombre_comisaria == "ADROGUE Nº 1", "nombre_comisaria"] <- "Almirante Brown"
@@ -732,23 +758,23 @@ comisariasMuni[comisariasMuni$nombre_comisaria == "AVELLANEDA Nº 6", "nombre_co
 comisariasMuni[comisariasMuni$nombre_comisaria == "AVELLANEDA Nº 7", "nombre_comisaria"] <- "Avellaneda"
 
 #LA PLATA
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 01", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 02", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 03", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 04", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 05", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 06", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 07", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 08", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 09", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 10", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 11", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 12", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 13", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 14", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 15", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 16", "nombre_comisaria"] <- "La Plata"
-comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 17", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 01", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 02", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 03", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 04", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 05", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 06", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 07", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 08", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 09", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 10", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 11", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 12", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 13", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 14", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 15", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 16", "nombre_comisaria"] <- "La Plata"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "LA PLATA Nº 17", "nombre_comisaria"] <- "La Plata"
 
 #OLIVOS A VICENTE LOPEZ
 comisariasMuni[comisariasMuni$nombre_comisaria == "OLIVOS Nº 01", "nombre_comisaria"] <- "Vicente López"
@@ -769,11 +795,11 @@ comisariasMuni[comisariasMuni$nombre_comisaria == "HURLINGHAM Nº 3", "nombre_co
 comisariasMuni[comisariasMuni$nombre_comisaria == "HURLINGHAM N° 3", "nombre_comisaria"] <- "Hurlingham"
 
 #PILAR
-comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 1", "nombre_comisaria"] <- "Pilar"
-comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 2", "nombre_comisaria"] <- "Pilar"
-comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 3", "nombre_comisaria"] <- "Pilar"
-comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 4", "nombre_comisaria"] <- "Pilar"
-comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 5", "nombre_comisaria"] <- "Pilar"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 1", "nombre_comisaria"] <- "Pilar"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 2", "nombre_comisaria"] <- "Pilar"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 3", "nombre_comisaria"] <- "Pilar"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 4", "nombre_comisaria"] <- "Pilar"
+#comisariasMuni[comisariasMuni$nombre_comisaria == "PILAR Nº 5", "nombre_comisaria"] <- "Pilar"
 
 #SAN ISIDRO
 comisariasMuni[comisariasMuni$nombre_comisaria == "SAN ISIDRO Nº 01", "nombre_comisaria"] <- "San Isidro"
@@ -796,16 +822,72 @@ comisariasMuni[comisariasMuni$nombre_comisaria == "ITUZAINGO Nº 4", "nombre_com
 comisariasMuni[comisariasMuni$nombre_comisaria == "ITUZAINGO N°2", "nombre_comisaria"] <- "Ituzaingó"
 comisariasMuni[comisariasMuni$nombre_comisaria == "ITUZAINGO", "nombre_comisaria"] <- "Ituzaingó"
 
-
-
-
-
+#TIGRE
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE Nº 1", "nombre_comisaria"] <- "Tigre"
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE Nº 2", "nombre_comisaria"] <- "Tigre"
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE Nº 3", "nombre_comisaria"] <- "Tigre"
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE Nº 4", "nombre_comisaria"] <- "Tigre"
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE Nº 5", "nombre_comisaria"] <- "Tigre"
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE Nº 6", "nombre_comisaria"] <- "Tigre"
+comisariasMuni[comisariasMuni$nombre_comisaria == "TIGRE N° 6", "nombre_comisaria"] <- "Tigre"
 
 comisariasMuni <- comisariasMuni %>%  group_by(nombre_comisaria) %>% 
   summarise(cantidad_robos_totales = sum(cantidad_robos_totales))
 
+comisariasMuni<-rename(comisariasMuni,municipio_nombre=nombre_comisaria)
+
+#EZEIZA
+comisariasMuni[comisariasMuni$municipio_nombre == "EZEIZA Nº 1 (EX. ESTEBAN ECHEVERRIA NO 4)", "municipio_nombre"] <- "Ezeiza"
+comisariasMuni[comisariasMuni$municipio_nombre == "EZEIZA Nº 2", "municipio_nombre"] <- "Ezeiza"
+
+#BERAZATEGUI
+comisariasMuni[comisariasMuni$municipio_nombre == "BERAZATEGUI Nº 1", "municipio_nombre"] <- "Berazategui"
+comisariasMuni[comisariasMuni$municipio_nombre == "BERAZATEGUI Nº 2", "municipio_nombre"] <- "Berazategui"
+comisariasMuni[comisariasMuni$municipio_nombre == "BERAZATEGUI Nº 3", "municipio_nombre"] <- "Berazategui"
+comisariasMuni[comisariasMuni$municipio_nombre == "BERAZATEGUI Nº 4", "municipio_nombre"] <- "Berazategui"
+comisariasMuni[comisariasMuni$municipio_nombre == "BERAZATEGUI Nº 5", "municipio_nombre"] <- "Berazategui"
+
+#SAN FERNANDO
+comisariasMuni[comisariasMuni$municipio_nombre == "SAN FERNANDO Nº 1", "municipio_nombre"] <- "San Fernando"
+comisariasMuni[comisariasMuni$municipio_nombre == "SAN FERNANDO Nº 2", "municipio_nombre"] <- "San Fernando"
+comisariasMuni[comisariasMuni$municipio_nombre == "SAN FERNANDO Nº 3", "municipio_nombre"] <- "San Fernando"
+comisariasMuni[comisariasMuni$municipio_nombre == "SAN FERNANDO Nº 4", "municipio_nombre"] <- "San Fernando"
+
+
+
+comisariasMuni <- comisariasMuni %>%  group_by(municipio_nombre) %>% 
+  summarise(cantidad_robos_totales = sum(cantidad_robos_totales))
 
 view(comisariasMuni)
 
 
+munis <- left_join(municipios, comisariasMuni, by = "municipio_nombre")
+view(munis)
 
+munis$municipio_nombre = as.factor(munis$municipio_nombre)
+
+munis %>% 
+  ggplot(aes(fill = cantidad_robos_totales), colors = "red") +
+  geom_sf() +
+  theme_bw() +
+  coord_sf(ylim = c( -34.2, -35),
+           xlim = c(-59,-57.6))
+ # geom_sf_text(aes(label = municipio_nombre), colour = "white")
+
+
+"TODO: ver si podemos hacer de municipios y no de departamentos"
+
+#municipios2 <- st_read('/home/datascience/Escritorio/tpfinalicd/Datasets/municipios.geojson')
+
+#munis2 <- left_join(municipios2, comisariasMuni, by = "municipio_nombre")
+#view(municipios2)
+
+#munis2$municipio_nombre = as.factor(munis$municipio_nombre)
+
+#munis2 %>% 
+ # ggplot(aes(fill = cantidad_robos_totales), colors = "red") +
+ # geom_sf() +
+ # theme_bw() +
+ # coord_sf(ylim = c( -34.2, -35),
+ #          xlim = c(-59,-57.6)) + 
+ # geom_sf_text(aes(label = municipio_nombre), colour = "white")  
