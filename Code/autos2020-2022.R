@@ -5,7 +5,7 @@ library(lubridate)
 library(ggridges)
 
 
-setwd("/home/datascience/Escritorio/tpfinalicd/Datasets")
+setwd("C:/Users/matia/icd/Datasets")
 autosenero2018 <- read.csv("dnrpa-robos-recuperos-autos-201801.csv")
 autosfebrero2018  <- read.csv("dnrpa-robos-recuperos-autos-201802.csv")
 autosmarzo2018 <- read.csv("dnrpa-robos-recuperos-autos-201803.csv")
@@ -276,7 +276,8 @@ comisarias2022<- unique(comisarias2022)
 comisarias2022$nombre_comisaria = as.factor(comisarias2022$nombre_comisaria)
 
 comisarias_top2022 <- comisarias2022 %>% filter(cantidad_robos >100)
-ggplot(comisarias_top2022, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), fill = nombre_comisaria)) + 
+ggplot(comisarias_top2022, aes(x = cantidad_robos, y = reorder(nombre_comisaria, cantidad_robos, decreasing = TRUE), 
+                               fill = nombre_comisaria)) + 
   geom_bar(stat = "identity", position = "dodge") +
   labs(y = "comisarias")
 
@@ -299,7 +300,8 @@ comisarias_top <- rbind(comisarias_top2018, comisarias_top2019, comisarias_top20
   summarise(cantidad_robos_totales = sum(cantidad_robos))
   #filter(cantidad_robos_totales >600)
 
-#view(comisarias_top)
+view(comisarias_top)
+
 nombrestop <- unique(comisarias_top$nombre_comisaria)
 #view(nombrestop)
 
@@ -368,7 +370,7 @@ matanza9<-matanza9%>%
   group_by(anio) %>% 
   mutate(cantidad = n())
 
-view(matanza9)
+#view(matanza9)
 
 matanza9$anio = as.factor(matanza9$anio)
 
@@ -419,7 +421,7 @@ comisarias_rec2019<- autos_rec2019 %>% ungroup() %>%
             cantidad_recuperos = cantidad_recuperos)
 
 comisarias_rec2019 <- unique(comisarias_rec2019)
-view(comisarias_rec2019)
+#view(comisarias_rec2019)
 
 
 #Autos recuperados 2020
@@ -436,7 +438,7 @@ comisarias_rec2020<- autos_rec2020 %>% ungroup() %>%
             cantidad_recuperos = cantidad_recuperos)
 
 comisarias_rec2020 <- unique(comisarias_rec2020)
-view(comisarias_rec2020)
+#view(comisarias_rec2020)
 
 #Autos recuperados 2021
 autos_rec2021 <- autos2021 %>% group_by(registro_seccional_descripcion) %>%
@@ -452,7 +454,7 @@ comisarias_rec2021<- autos_rec2021 %>% ungroup() %>%
             cantidad_recuperos = cantidad_recuperos)
 
 comisarias_rec2021 <- unique(comisarias_rec2021)
-view(comisarias_rec2021)
+#view(comisarias_rec2021)
 
 #Autos recuperados 2022
 autos_rec2022 <- autos2022 %>% group_by(registro_seccional_descripcion) %>%
@@ -468,7 +470,7 @@ comisarias_rec2022<- autos_rec2022 %>% ungroup() %>%
             cantidad_recuperos = cantidad_recuperos)
 
 comisarias_rec2022 <- unique(comisarias_rec2022)
-view(comisarias_rec2022)
+#view(comisarias_rec2022)
 
 
 #Combinamos datasets de comisarias con robos y de recuperaciones
@@ -484,7 +486,7 @@ comisarias_top_rec <- rbind(comisarias_rec2018, comisarias_rec2019, comisarias_r
 
 comisarias_top_robo_rec <- merge(comisarias_top, comisarias_top_rec, by = "nombre_comisaria")
 
-view(comisarias_top_robo_rec)
+#view(comisarias_top_robo_rec)
 
 ggplot(comisarias_top_robo_rec, aes(x = cantidad_robos_totales, y = reorder(nombre_comisaria, cantidad_robos_totales) ,
                            fill = desc(cantidad_recuperos_totales))) + 
@@ -499,7 +501,7 @@ comisarias_10_rec <- rbind(comisarias_rec2018, comisarias_rec2019, comisarias_re
   group_by(nombre_comisaria) %>% 
   summarise(cantidad_recuperos_totales = sum(cantidad_recuperos))%>% 
   filter(cantidad_recuperos_totales>67)
-view(comisarias_10_rec)
+#view(comisarias_10_rec)
 comisariass<- rbind(comisarias2018, comisarias2019, comisarias2020, comisarias2021,
                         comisarias2022) %>% 
   group_by(nombre_comisaria) %>% 
@@ -508,7 +510,7 @@ comisariass<- rbind(comisarias2018, comisarias2019, comisarias2020, comisarias20
 
 comisarias_top_rec <- merge(comisarias_10_rec , comisariass, by = "nombre_comisaria")
 
-view(comisarias_top_rec)
+#view(comisarias_top_rec)
 
 ggplot(comisarias_top_rec, aes(x = cantidad_recuperos_totales, y = reorder(nombre_comisaria, cantidad_recuperos_totales) ,
                                     fill = desc(cantidad_robos_totales))) + 
@@ -516,7 +518,7 @@ ggplot(comisarias_top_rec, aes(x = cantidad_recuperos_totales, y = reorder(nombr
   labs(x = "Recuperos de autos", y = "Comisaria", 
        title = "Cantidad de recuperos de autos por comisarias", subtitle = "Desde el 2018 hasta la actualidad",
        fill = "Cantidad de robos")
-view(autos2019)
+#view(autos2019)
 # IDEA : Density ridges por fechas
 autos2019<-autos2019%>%
   group_by(tramite_fecha)%>%
@@ -548,11 +550,11 @@ autos2021 <- autos2021[,!names(autos2021) %in% c("automotor_tipo_codigo")]
 autos2022 <- autos2022[,!names(autos2022) %in% c("automotor_tipo_codigo")]
 
 autos<-rbind(autos2018,autos2019,autos2020,autos2021,autos2022)
-view(autos)
+#view(autos)
 
 autos[autos$tramite_tipo == "DENUNCIA DE ROBO O HURTO / RETENCION INDEBIDA", "tramite_tipo"] <- "DENUNCIA DE ROBO O HURTO"
 
-view(autos)
+#view(autos)
 
 #Creacion de mapa de delito
 
@@ -566,11 +568,11 @@ library(sf)
   #geom_sf() +
   #theme_bw()
 
-municipios <- st_read('/home/datascience/Escritorio/tpfinalicd/Datasets/circuitos-electorales.geojson')
+municipios <- st_read('C:/Users/matia/ICD/Datasets/circuitos-electorales.geojson')
 
 municipios %>% filter(municipio_nombre == "La Matanza" )
 
-
+view(municipios)
 
 municipios %>% 
   ggplot(aes(fill = municipio_nombre)) +
@@ -579,7 +581,7 @@ municipios %>%
   coord_sf(ylim = c( -34.2, -35),
            xlim = c(-59,-57.6))
 
-view(autos_robos2018)
+#view(autos_robos2018)
 
 library("rjson")
 
@@ -866,28 +868,326 @@ view(munis)
 
 munis$municipio_nombre = as.factor(munis$municipio_nombre)
 
-munis %>% 
-  ggplot(aes(fill = cantidad_robos_totales), colors = "red") +
+ 
+g1 <- ggplot(munis, aes(fill = cantidad_robos_totales), colors = "red") +
   geom_sf() +
   theme_bw() +
-  coord_sf(ylim = c( -34.2, -35),
-           xlim = c(-59,-57.6))
- # geom_sf_text(aes(label = municipio_nombre), colour = "white")
+  coord_sf(ylim = c( -34.2, -35), xlim = c(-59,-57.6)) + 
+  labs(title = "Distribucion de cantidad de robos de autos por partido de GBA",
+       fill = "Cantidad de robos", x = "Latitud", y = "Longitud") +
+  theme(plot.title = element_text(size=30), legend.title = element_text(size = 20),
+        legend.text = element_text(size = 15), axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15))
 
+g1
 
 "TODO: ver si podemos hacer de municipios y no de departamentos"
 
-#municipios2 <- st_read('/home/datascience/Escritorio/tpfinalicd/Datasets/municipios.geojson')
+municipios2 <- st_read('C:/Users/matia/ICD/Datasets/municipios.geojson')
 
-#munis2 <- left_join(municipios2, comisariasMuni, by = "municipio_nombre")
-#view(municipios2)
+view(municipios2)
 
-#munis2$municipio_nombre = as.factor(munis$municipio_nombre)
+comisariasMuni2 <- comisariasMuni
+colnames(comisariasMuni2)[1] <- "nombre"
+view(comisariasMuni2)
 
-#munis2 %>% 
- # ggplot(aes(fill = cantidad_robos_totales), colors = "red") +
- # geom_sf() +
- # theme_bw() +
- # coord_sf(ylim = c( -34.2, -35),
- #          xlim = c(-59,-57.6)) + 
- # geom_sf_text(aes(label = municipio_nombre), colour = "white")  
+
+munis2 <- left_join(municipios2, comisariasMuni2, by = "nombre")
+
+view(munis2)
+munis2$nombre = as.factor(munis2$nombre)
+
+
+g2 <-  ggplot(munis2, aes(fill = cantidad_robos_totales), colors = "red") +
+  geom_sf() +
+  theme_bw() +
+  coord_sf(ylim = c( -34.2, -35),
+           xlim = c(-59,-57.6)) +
+  geom_sf_text(aes(label = nombre), colour = "white")  
+
+g3 <- geom_sf_text(data = munis2, aes(label = nombre, size = 100), colour = "orange", ) 
+
+g1 + g3
+
+view(autos)
+
+
+#Bar plot de comisarias de la matanza
+
+comisariasLM <- rbind(comisarias2018, comisarias2019, comisarias2020, comisarias2021, comisarias2022) %>% 
+  group_by(nombre_comisaria) %>% 
+  summarise(cantidad_robos_totales = sum(cantidad_robos))
+
+comisariasLM1 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 01")
+comisariasLM2 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 02")
+comisariasLM3 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 03")
+comisariasLM4 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 04")
+comisariasLM5 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 05")
+comisariasLM6 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 06")
+comisariasLM7 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 07")
+comisariasLM8 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 08")
+comisariasLM9 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 09")
+comisariasLM10 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 10")
+comisariasLM11 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 11")
+comisariasLM12 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 12")
+comisariasLM13 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 13")
+comisariasLM14 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 14")
+comisariasLM15 <- comisariasLM %>% filter(nombre_comisaria == "LA MATANZA Nº 15")
+
+
+comisariasLM <- rbind(comisariasLM1, comisariasLM2, comisariasLM3, comisariasLM4, comisariasLM5,
+                      comisariasLM6, comisariasLM7, comisariasLM8, comisariasLM9,
+                      comisariasLM10, comisariasLM11, comisariasLM12, comisariasLM13,
+                      comisariasLM14, comisariasLM15)
+view(comisariasLM)
+
+comisarias_recLM <- rbind(comisarias_rec2018, comisarias_rec2019, comisarias_rec2020, comisarias_rec2021,
+                            comisarias_rec2022) %>% 
+  group_by(nombre_comisaria) %>% 
+  summarise(cantidad_recuperos_totales = sum(cantidad_recuperos))
+
+comisariasLM2 <- merge(comisariasLM, comisarias_recLM, by = "nombre_comisaria")
+view(comisariasLM2)
+
+#cantidad de robos por comisarias
+ggplot(data = comisariasLM2, aes(y = reorder(nombre_comisaria, cantidad_robos_totales, decreasing = FALSE),
+                                x = cantidad_robos_totales, fill = "red")) +
+  geom_bar(position = "dodge", stat = "identity") + 
+  labs(title = "Robos de autos por comisaria", x = "Robos totales",
+       y = "Comisarias", subtitle = "En el municipio de La Matanza") + 
+  theme(plot.title = element_text(size=30),
+        plot.subtitle = element_text(size = 20),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 20))
+#cantidad de recupéros por comisarias
+ggplot(data = comisariasLM2, aes(y = reorder(nombre_comisaria, cantidad_recuperos_totales, decreasing = FALSE),
+                                 x = cantidad_recuperos_totales)) +
+  geom_bar(position = "dodge", stat = "identity", fill = "#56B4E9") + 
+  labs(title = "Robos de autos por comisaria", x = "Recuperos totales",
+       y = "Comisarias", subtitle = "En el municipio de La Matanza") + 
+  theme(plot.title = element_text(size=30),
+        plot.subtitle = element_text(size = 20),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 20))
+
+autos2 <- autos %>% group_by(tramite_tipo, registro_seccional_descripcion)
+
+autosLM1 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 01")
+autosLM2 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 02")
+autosLM3 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 03")
+autosLM4 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 04")
+autosLM5 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 05")
+autosLM6 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 06")
+autosLM7 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 07")
+autosLM8 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 08")
+autosLM9 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 09")
+autosLM10 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 10")
+autosLM11 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 11")
+autosLM12 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 12")
+autosLM13 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 13")
+autosLM14 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 14")
+autosLM15 <- autos2 %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 15")
+
+
+autosLM <- rbind(autosLM1, autosLM2, autosLM3, autosLM4, autosLM5, autosLM6,
+                 autosLM7, autosLM8, autosLM9, autosLM10, autosLM11, autosLM12, autosLM12,
+                 autosLM13, autosLM14, autosLM15)
+
+ggplot(data = autosLM, aes(y = registro_seccional_descripcion, fill = tramite_tipo)) +
+  geom_bar(position = "dodge") + 
+  labs(title = "Robos de autos por comisaria", x = "Robos totales",
+       y = "Comisarias", subtitle = "En el municipio de La Matanza") + 
+  theme(plot.title = element_text(size=30),
+        axis.title = element_text(size = 30),
+        axis.text = element_text(size = 20))
+
+
+#MODELADO
+mod1 <- lm(cantidad_recuperos_totales ~ log(cantidad_robos_totales), comisariasLM2)
+
+mod2 <- lm(cantidad_recuperos_totales ~ cantidad_robos_totales + I(cantidad_robos_totales^2), comisariasLM2)
+
+grid <- add_predictions(comisariasLM2, mod1)
+
+view(grid)
+
+g3 <- ggplot(grid) + 
+  geom_point( aes(x = cantidad_robos_totales, y = cantidad_recuperos_totales)) +
+  labs(title = "Cantidad de recuperos dependiendo de cantidad de robos",
+       subtitle = "En La Matanza", x = "Robos totales", y = "Recuperos totales")
+
+g3 + geom_smooth(aes(cantidad_robos_totales, pred), color = "red", size = 1.2)
+ 
+
+summary(mod1)
+
+#LA MATANZA 9 modelado
+m9unique<-matanza9%>% ungroup() %>% 
+  summarise(cantidad,anio)
+
+m9unique<-unique(m9unique)
+
+m9unique$anio = as.integer(m9unique$anio)
+
+mod1 <- lm(cantidad ~ anio, m9unique)
+
+grid <- add_predictions(m9unique, mod1)
+
+g6 <- ggplot(m9unique, aes(x = anio, y = cantidad)) + geom_point() + 
+  labs(title = "Distribucion de robos de autos por año",
+       subtitle= "En la comisaria La Matanza N°09", y = "Cantidad de robos",
+       x = "Año")
+
+g6 + geom_line(data = grid, aes(anio, pred), color = "red", size = 1.2)
+
+grid
+
+
+#AUTO MAS ROBADO
+unique(autos$automotor_modelo_descripcion)
+
+autos_modelo <- autos %>% group_by(automotor_modelo_descripcion, registro_seccional_descripcion) %>% 
+  summarise(cantidad = n()) %>% filter(registro_seccional_descripcion == "LA MATANZA Nº 09")
+
+view(autos_modelo)
+
+#LIMPIO AUTO GOL
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL TREND 1.6", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL TREND 1.6 MSI", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.4 L", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GLI", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL TREND 1.6 GP", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL 1.6 MI", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.9 SD", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GLD", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL 1.6D", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL.", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.0L MI PLUS", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL 1.9 SD", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL PLUS 1.6D", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6  012", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6 012", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6 012 /2000", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6 5P (0132) 01A", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6(0270)    002", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6/2004", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.6/2010", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.9 SD 5P (0212) 01A", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL 1.9 SD/2000", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL 1.6MI", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GL/93", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GLI 1.8", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL GLI 1.8 /97", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL TREND 1.6I MOTION", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL TREND HIGHLINE 1.6 MSI", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "GOL TREND TRENDLINE 1.6 GAS 101CV MQ", "automotor_modelo_descripcion"] <- "GOL"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "WV GOL GLI 1.6", "automotor_modelo_descripcion"] <- "GOL"
+
+
+#CORSA CLASSIC
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4P SUPER 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GL 1.6 MPFI", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 3P AA+DIR 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC SW BASE+AC 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GL 1.6 M.P.F.I.", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 1.8L 4P GL AA+DIR GAS", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 DOOR WIND 1.6 MPFI", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 3P BASE 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4P BASE 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC SW BASE +AC 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 4 P GL AA+DIR GAS 1.8", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PUERTAS GL A/A Y D/P", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PUERTAS WIND 1.6 LTS", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 1.4", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4 PTAS GL 1.4N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4 PTAS GLS 1.4N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4P SUP 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GLS 1.6 M.P.F.I.", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GLS 16V 1.6 MPFI", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA  4PUERTAS GL", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 PTAS CITY 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 PTAS WIND 1.6 MPFI", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 PTAS WIND 1.6", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3DOOR WIND 1.6 MPFI", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3PTAS CITY 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PTAS GLS 1.7 D", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PTAS. GLS 1.7D", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PTAS. WIND 1.6 LTS", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PTAS. WIND 1.7 D", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4 PTAS.WIND 1.7D", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4P GL1.7 DIESEL A", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4P WIND 1.7 D", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 4PTAS GLS 1.7 DIESEL", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 3 P BASE 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 3 PTAS GL 1.4N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 3P CARGO 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4 P BASE 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4 P SUPER 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4 PTAS BASE 1.4N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4 PTAS GL 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4P BASE 1.7D", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC 4P SUPER 1.6 N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA COMBO 1.7", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GL 1.6 MPFI 3P (AA+DP)", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GL 1.6 MPFI 4P C/AA", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GL 1.7 DIESEL", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA GLS 1.6 M P F I", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 4 P GL AA+DIR GAS 1.8 2007", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 4 PTAS GL DTI 1.7", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 4P CD GAS 1.8", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 4P GL AA+DIR GAS 1.8", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 5P GL AA+DIR GAS 1.8", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA II 5P GL AA+DIR GAS 1.8/2003", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA WAGON GL 1.6 MPFI", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA WAGON GLS 16V", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA WIND 1.6 M.P.F.I.5P.", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 PTAS WIND 1.6N.", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 PTAS.CITY 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA 3 PTAS WIND 1.6N", "automotor_modelo_descripcion"] <- "CORSA CLASSIC"
+
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "CORSA CLASSIC", "automotor_modelo_descripcion"] <- "CORSA"
+
+#PALIO
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO (326) ATTRACTIVE 5P 1.4 8V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO FIRE 1.4", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO FIRE 1.4 5P", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO S 1.3 MPI (3P)", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO (326) ESSENCE 5P 1.6 16V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO 1.4 FIRE", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO ELD 3P", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO FIRE 1242 MPI 16V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO FIRE 5P 1.4 8V BE", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO 1.6", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO ADVENTURE 1.6", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO ADVENTURE 1.7TD", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO EL 3P", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO EL 4P", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO ELD 5P", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO ELX 1.4 8V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO ELX 1242 FIRE 16V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO EX TD", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO HL 4P", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO HLX 1.8 MPI 8V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO WEEKEND 16V MPI", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO WEEKEND ADVENTURE 1.6 16V", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO YOUNG 1.3 MPI", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO WEEKEND 1.4", "automotor_modelo_descripcion"] <- "PALIO"
+autos_modelo[autos_modelo$automotor_modelo_descripcion == "PALIO FIRE 5P 1.4 8V BENZ EOBD", "automotor_modelo_descripcion"] <- "PALIO"
+
+
+
+autos_modelo <- autos_modelo %>%  group_by(automotor_modelo_descripcion) %>% 
+  summarise(cantidad = sum(cantidad))
+
+
+autos_modelo_top3 <- autos_modelo %>% filter(cantidad >= 48)
+
+ggplot(autos_modelo_top3, aes(x = automotor_modelo_descripcion, y = cantidad) ) +
+  geom_bar(position = "dodge", stat = "identity") + 
+  labs(title = "3 Modelos de autos mas robados", subtitle = "En la jurisdiccion de la comisaria de La Matanza N°09",
+       x = "Modelo de auto", y = "Cantidad de veces robado")
+
+
+
